@@ -1,15 +1,21 @@
 version: '3'
 
 volumes:
-  pg_data:
+  kc_postgres:
 
 services:
-#  db:
-#    image: sqlite3
-#    volumes:
-#      - pg_data:/app/authentication
+  kc_db:
+      image: postgres
+      volumes:
+        - kc_postgres:/var/lib/postgresql/data
+      environment:
+        POSTGRES_DB: keycloak
+        POSTGRES_USER: keycloak
+        POSTGRES_PASSWORD: password
   backend:
     build: ./usetech/
+    volumes:
+      - ./usetech:/app
   gateway:
     build: ./nginx/
     depends_on:
@@ -19,7 +25,16 @@ services:
   keycloack:
     image: quay.io/keycloak/keycloak:22.0.3
     command: start-dev
-    env_file:
-      - .env
+    environment:
+      DB_VENDOR: POSTGRES
+      DB_ADDR: postgres
+      DB_DATABASE: keycloak
+      DB_USER: keycloak
+      DB_SCHEMA: public
+      DB_PASSWORD: password
+      KEYCLOAK_ADMIN: dmin
+      KEYCLOAK_ADMIN_PASSWORD: admin
     ports:
       - 8080:8080
+    depends_on:
+      - kc_db
