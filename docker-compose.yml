@@ -1,0 +1,25 @@
+version: '3'
+
+volumes:
+  pg_data:
+
+services:
+#  db:
+#    image: sqlite3
+#    volumes:
+#      - pg_data:/app/authentication
+  backend:
+    build: ./usetech/
+  gateway:
+    build: ./nginx/
+    depends_on:
+      - backend
+    ports:
+      - 8000:80
+  keycloack:
+    image: quay.io/keycloak/keycloak:22.0.3
+    command: start-dev
+    env_file:
+      - .env
+    ports:
+      - 8080:8080
