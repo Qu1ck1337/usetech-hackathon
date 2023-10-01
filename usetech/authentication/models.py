@@ -5,7 +5,7 @@ class Service(models.Model):
     url = models.URLField()
 
     def __str__(self):
-        return self.name
+        return self.url
 
 
 class Client(models.Model):
@@ -16,7 +16,7 @@ class Client(models.Model):
     )
 
     def __str__(self):
-        return self.name
+        return self.client_id
 
 
 class UserService(models.Model):
@@ -32,4 +32,4 @@ class UserService(models.Model):
     )
 
     def __str__(self):
-        return f'{self.achievement} {self.cat}'
+        return f'{self.client} {self.service}'
