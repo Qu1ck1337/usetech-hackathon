@@ -5,13 +5,13 @@ volumes:
 
 services:
   kc_db:
-      image: postgres
-      volumes:
-        - kc_postgres:/var/lib/postgresql/data
-      environment:
-        POSTGRES_DB: keycloak
-        POSTGRES_USER: keycloak
-        POSTGRES_PASSWORD: password
+    image: postgres
+    volumes:
+      - kc_postgres:/var/lib/postgresql/data
+    environment:
+      POSTGRES_DB: keycloak
+      POSTGRES_USER: keycloak
+      POSTGRES_PASSWORD: password
   backend:
     build: ./usetech/
     volumes:
@@ -27,15 +27,7 @@ services:
   keycloak:
     image: quay.io/keycloak/keycloak:22.0.3
     command: start-dev
-    environment:
-      DB_VENDOR: POSTGRES
-      DB_ADDR: postgres
-      DB_DATABASE: keycloak
-      DB_USER: keycloak
-      DB_SCHEMA: public
-      DB_PASSWORD: password
-      KEYCLOAK_ADMIN: dmin
-      KEYCLOAK_ADMIN_PASSWORD: admin
+    env_file: .env
     ports:
       - 8080:8080
     depends_on:
